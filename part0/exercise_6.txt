@@ -1,0 +1,9 @@
+title Exercise_5 SPA
+
+note left of browser: User fills form field \nand clicks submit
+browser->browser: Form eventHandler calls \ne.preventDefault()
+note over browser: Browser encodes new note\npayload as JSON browser
+browser->browser: Adds note to existing\n notes in DOM
+browser->browser: Browser redraws notes
+browser->server: HTTP POST: /new_note_spa
+server-->browser: HTTP 201: Created 

@@ -1,0 +1,11 @@
+title Exercise_5 SPA
+
+browser->server: HTTP GET: /spa
+server-->browser: [Status Code:200] HTML Code
+browser->server: HTTP GET: /main.css
+server-->browser: [Status Code:200] "main.css"
+browser->server: HTTP GET: /main.js
+server-->browser: [Status Code:200] "main.js"
+browser->server: HTTP GET: /data.json
+server-->browser: [Status Code:200] "data.json"
+note over browser: browser decodes json\nbased on content-type\nheader and inserts into\npage
