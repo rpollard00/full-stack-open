@@ -1,0 +1,12 @@
+title AJAX POST Exercise 4
+
+note left of browser: User fills form field \nand clicks submit
+browser->server: HTTP POST: /new_note
+server->browser: HTTP 302 [URL Redirect]: Location: /notes
+note over browser: HTTP 302 Instructs Browser \nto Issue a new HTTP GET
+browser->server: HTTP GET: /notes
+server-->browser: HTML Code
+browser->server: HTTP GET: "main.css"
+server-->browser: CSS Stylesheet [main.css]
+browser->server: HTTP GET: "main.js"
+server-->browser: Javascript "main.js"
