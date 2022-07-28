@@ -2,6 +2,21 @@ import './App.css';
 
 import { useState } from 'react';
 
+const Anecdote = (props) => {
+  return (
+    <div>
+    <p>{props.text}</p>
+    <p>has {props.votes} votes</p>
+    </div>
+  )
+}
+
+const Button = ({handleClick, text}) => {
+  return (
+    <button onClick={handleClick}>{text}</button>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -23,19 +38,18 @@ const App = () => {
     setVotes([...copy]);
   }
 
-  const handleRandom = () => {
-    setSelected(Math.floor(Math.random()*anecdotes.length))
-  }
-  
+  const handleRandom = () => setSelected(Math.floor(Math.random()*anecdotes.length))
+  const getMost = (array) => array.indexOf(Math.max(...array));
+  const maxIndex = getMost(votes);
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
-      <br />
-      <button onClick={handleVotes}>vote</button>
-      <button onClick={handleRandom}>Next Anecdote</button>
-
-      
+      <h1>Anecdote of the Day</h1>
+      <Anecdote text={anecdotes[selected]} votes={votes[selected]} />
+      <Button text="vote" handleClick={handleVotes} />
+      <Button text="next anecdote" handleClick={handleRandom} />
+      <h1>Anecdote with the Most Votes</h1>
+      <Anecdote text={anecdotes[maxIndex]} votes={votes[maxIndex]} />
     </div>
   );
 }
