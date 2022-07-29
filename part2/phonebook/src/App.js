@@ -1,16 +1,25 @@
 import './App.css';
+import axios from 'axios'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from './components/Form'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
 
 
-const App = (props) => {
-  const [contacts, setContacts] = useState(props.contacts)
-  const [newContact, setNewContact] = useState('Blirk')
-  const [newPhone, setNewPhone] = useState('123-456-7890')
+const App = () => {
+  const [contacts, setContacts] = useState([])
+  const [newContact, setNewContact] = useState('')
+  const [newPhone, setNewPhone] = useState('')
   const [searchName, setSearchName] = useState('')
+
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/contacts')
+      .then(response => setContacts(response.data))
+  }
+
+  useEffect(hook, []) //empty array in 2nd element tells it to only fetch once
 
   const addNewContact = (event) => {
     event.preventDefault()
