@@ -1,8 +1,12 @@
 import React from 'react'
 
-const CountryName = ({country}) => {
+
+
+const CountryName = ({country, buttonHandler}) => {
   return (
-    <div>{country.name.common}</div>
+    <div>
+      {country.name.common}<button id={country.name.common} onClick={buttonHandler}>show</button>
+    </div>
   )
 }
 
@@ -16,14 +20,14 @@ const CountryDetailed = ({country}) => {
       <div>area {country.area}</div>
       <h3>languages:</h3>
       <ul>
-        {languages.map((language) => <li>{language[1]}</li>)}
+        {languages.map((language) => <li key={language[0]}>{language[1]}</li>)}
       </ul>
       <img src={country.flags.png} />
     </div>
   )
 }
 
-const Countries = ({countries}) => {
+const Countries = ({countries, buttonHandler}) => {
   if (countries.length === 1) {
     return (
       <div><CountryDetailed key={countries[0].cca2} country={countries[0]} /></div>
@@ -32,7 +36,7 @@ const Countries = ({countries}) => {
   else if (countries.length < 10) {
     return (
       <div>
-        {countries.map((country) => <CountryName key={country.cca2} country={country} />)}
+        {countries.map((country) => <CountryName key={country.cca2} country={country} buttonHandler={buttonHandler} />)}
       </div>
     )
   }

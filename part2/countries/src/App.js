@@ -11,12 +11,19 @@ const App = () => {
   
   const hook = () => { axios
     .get('https://restcountries.com/v3.1/all')
-    .then(response => setCountries(response.data))
+    .then(response => { 
+      setCountries(response.data)
+    })
   }
   
   const handleCountrySearch = (event) => {
     console.log(`Input ${event.target.value}`)
     setCountrySearch(event.target.value)
+  }
+
+  const handleButton = (event) => {
+    console.log('Pressed button', event.target.id)
+    setCountrySearch(event.target.id)
   }
 
   const countryFilter = countries
@@ -32,8 +39,8 @@ const App = () => {
       <form>
         find countries<input onChange={handleCountrySearch}></input>
       </form>
-      <div>{countrySearch}</div>
-      <Countries countries={countryFilter} />
+      <button>reset</button>
+      <Countries countries={countryFilter} buttonHandler={handleButton} />
     </div>
   );
 }
