@@ -3,11 +3,8 @@ import './App.css';
 import { useState } from 'react';
 import Form from './components/Form'
 import Search from './components/Search'
+import Contacts from './components/Contacts'
 
-
-const Contacts = (props) => {
-  
-}
 
 const App = (props) => {
   const [contacts, setContacts] = useState(props.contacts)
@@ -17,7 +14,6 @@ const App = (props) => {
 
   const addNewContact = (event) => {
     event.preventDefault()
-    console.log(event.target)
     
     const alreadyExists = contacts
       .map(contact => contact.name.toLowerCase())
@@ -40,20 +36,14 @@ const App = (props) => {
     setNewPhone('')
   }
 
-  const handleNameField = (event) => {
-    console.log('contact', event.target.value);
-    setNewContact(event.target.value);
-  }
-
-  const handlePhoneField = (event) => {
-    console.log('phone', event.target.value);
-    setNewPhone(event.target.value);
-  }
-
-  const handleSearchField = (event) => {
-    console.log('search', event.target.value);
-    setSearchName(event.target.value);
-  }
+  const handleNameField = event => setNewContact(event.target.value)
+  const handlePhoneField = event => setNewPhone(event.target.value)
+  const handleSearchField = (event) => setSearchName(event.target.value)
+  
+  const contactsToShow = contacts
+    .filter(contact => contact.name.toLowerCase()
+    .includes(searchName.toLowerCase())
+    );
   
   return (
     <div>
@@ -68,9 +58,7 @@ const App = (props) => {
         contactHandler={addNewContact}
       />
       <h1>Numbers</h1>
-      <ul>
-        {contacts.map((contact) => <li key={contact.id}>{contact.name} : {contact.phone}</li>)}
-      </ul>
+      <Contacts contacts={contactsToShow} />
     </div>
   );
 }
