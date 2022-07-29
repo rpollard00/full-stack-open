@@ -1,4 +1,5 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 
 
@@ -12,7 +13,18 @@ const CountryName = ({country, buttonHandler}) => {
 
 const CountryDetailed = ({country}) => {
   const languages = Object.entries(country.languages)
-  console.log('Languages',languages)
+  const [ weatherData, setWeatherData ] = useState([])
+  
+  useEffect(() => {
+    const getWeather = async () => {
+      const weatherDataTemp = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.capitalInfo.latlng[0]}&lon=${country.capitalInfo.latlng[1]}&appid=${process.env.REACT_APP_API_KEY}`)
+      setWeatherData(weatherDataTemp.data);
+    }
+    getWeather()
+  }, [country.capitalInfo]);
+  
+  console.log('i dont get it', weatherData);
+  //console.log('Languages',languages)
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -22,11 +34,18 @@ const CountryDetailed = ({country}) => {
       <ul>
         {languages.map((language) => <li key={language[0]}>{language[1]}</li>)}
       </ul>
-      <img src={country.flags.png} />
+      <img src={country.flags.png} alt={country.name.common + ' flag'} />
+      <div>
+        <h2>Weather in {country.capital}</h2>
+        <div>temperature {(Number(weatherData.main?.temp) - 273.15).toFixed(2).toString() || "Not loaded"}  Celsius</div>
+         { weatherData.weather ? <img alt="weather icon" src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} /> : "" }
+        <div>wind {weatherData.wind?.speed || ""} m/s</div>
+      </div>
     </div>
   )
 }
 
+ 
 const Countries = ({countries, buttonHandler}) => {
   if (countries.length === 1) {
     return (

@@ -8,7 +8,7 @@ import Countries from './components/Countries'
 const App = () => {
   const [ countries, setCountries] = useState([])
   const [ countrySearch, setCountrySearch] = useState('')
-  
+
   const hook = () => { axios
     .get('https://restcountries.com/v3.1/all')
     .then(response => { 
@@ -17,12 +17,12 @@ const App = () => {
   }
   
   const handleCountrySearch = (event) => {
-    console.log(`Input ${event.target.value}`)
+    //console.log(`Input ${event.target.value}`)
     setCountrySearch(event.target.value)
   }
 
   const handleButton = (event) => {
-    console.log('Pressed button', event.target.id)
+    //console.log('Pressed button', event.target.id)
     setCountrySearch(event.target.id)
   }
 
@@ -31,16 +31,17 @@ const App = () => {
       country.name.common.toLowerCase()
       .includes(countrySearch.toLowerCase()))
 
-  console.log(`countryfilter ${countryFilter}`)
+  //console.log('weatherapi', process.env.REACT_APP_API_KEY)
+  //console.log(`countryfilter ${countryFilter}`)
   useEffect(hook, [])
-  console.log(countries)
+  //console.log(countries)
   return (
     <div>
       <form>
         find countries<input onChange={handleCountrySearch}></input>
       </form>
       <button>reset</button>
-      <Countries countries={countryFilter} buttonHandler={handleButton} />
+      { countries ? <Countries countries={countryFilter} buttonHandler={handleButton} /> : "" }
     </div>
   );
 }
