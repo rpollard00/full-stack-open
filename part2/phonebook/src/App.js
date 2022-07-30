@@ -23,17 +23,14 @@ const App = () => {
 
   const addNewContact = (event) => {
     event.preventDefault()
-    
-    const alreadyExists = contacts
-      .map(contact => contact.name.toLowerCase())
-      .includes(newContact.toLowerCase());
-
-    if (alreadyExists) {
-      alert(`${newContact} is already added to phonebook`);
+    const existingContact = contacts.find((contact) => (contact.name.toLowerCase() === newContact.toLowerCase()))
+  
+    if (existingContact) {
+      // update existing contact
+      updateHandler(existingContact)
     } 
     else {
       const contactObject = {
-        //id: contacts.length + 1,
         name: newContact,
         phone: newPhone,
       }
@@ -45,21 +42,28 @@ const App = () => {
     setNewPhone('')
   }
 
+  const updateHandler = contactToUpdate => {
+    if (window.confirm(`Update contact ${contactToUpdate.name}?`)) {
+      const contactUpdateObj = { ...contactToUpdate, phone: newPhone}
+      phonebookService
+        .updateContact(contactUpdateObj.id, contactUpdateObj)
+        .then(updatedContact => 
+            setContacts(contacts.map(
+              contact => contact.id !== updatedContact.id ? contact : updatedContact 
+        )))
+    }
+  }
+
   const deleteHandler = (id) => {
-    console.log('Does this work?', id);
     const contactName = contacts.find(c => c.id === id).name
     if (window.confirm(`Do you want to delete ${contactName}`)) {
-      /// do delete action
-      // post the delete, get the list again, setContact to the new list
       phonebookService
         .deleteContact(id)
         .then((response) => {
-          console.log('delete', response)
-          response.status !== 200 ? console.log('delete failed', response) : setContacts(contacts.filter(contact => contact.id !== id))
+          response.status !== 200 ? 
+            console.log('delete failed', response) : 
+            setContacts(contacts.filter(contact => contact.id !== id))
         })
-        
-  
-        
     }
   }
 

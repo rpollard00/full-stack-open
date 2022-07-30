@@ -1,5 +1,5 @@
 {
-  "contacts":[ 
+  "contacts": [
     {
       "id": 1,
       "name": "Julio Rodriguez",
@@ -19,6 +19,26 @@
       "id": 4,
       "name": "Cal Raleigh",
       "phone": "1-800-BIG-Dump"
+    },
+    {
+      "name": "Luis Castillo",
+      "phone": "1-800-HELL-YEA",
+      "id": 5
+    },
+    {
+      "name": "Noelvi Marte",
+      "phone": "123-12-11",
+      "id": 6
+    },
+    {
+      "name": "Dylan Moore",
+      "phone": "maybe",
+      "id": 9
+    },
+    {
+      "name": "Spock",
+      "phone": "1-800-20391",
+      "id": 11
     }
   ]
 }
