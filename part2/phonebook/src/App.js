@@ -5,6 +5,7 @@ import Form from './components/Form'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
 import phonebookService from './services/phonebookService';
+import Notification from './components/Notification';
 
 
 const App = () => {
@@ -12,6 +13,8 @@ const App = () => {
   const [newContact, setNewContact] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationStyle, setNotificationStyle] = useState('informational')
 
   const hook = () => {
     phonebookService
@@ -36,8 +39,13 @@ const App = () => {
       }
       phonebookService
         .postContact(contactObject)
-        .then(createdContact => setContacts(contacts.concat(createdContact)))
+        .then(createdContact => {
+          showMessage(`Added new contact ${createdContact.name}`, 'informational')
+          return setContacts(contacts.concat(createdContact)
+        )})
+        
     }
+    
     setNewContact('')
     setNewPhone('')
   }
@@ -47,22 +55,34 @@ const App = () => {
       const contactUpdateObj = { ...contactToUpdate, phone: newPhone}
       phonebookService
         .updateContact(contactUpdateObj.id, contactUpdateObj)
-        .then(updatedContact => 
-            setContacts(contacts.map(
-              contact => contact.id !== updatedContact.id ? contact : updatedContact 
-        )))
+        .then(updatedContact =>  {
+          showMessage(`Updated contact ${updatedContact.name}: Phone ${updatedContact.phone}`, 'informational')
+          return setContacts(contacts.map(contact => contact.id !== updatedContact.id ? contact : updatedContact ))
+        })
+        .catch(error => {
+          showMessage(`Error ${contactToUpdate.name} doesn't exist!`, 'error')
+          setContacts(contacts.filter(contact => contact.id !== contactToUpdate.id))
+      })
     }
   }
+  const showMessage = (message, style) => {
+    setNotificationMessage(message)
+    setNotificationStyle(style)
+    setTimeout(() => setNotificationMessage(null), 5000)
 
+  }
   const deleteHandler = (id) => {
     const contactName = contacts.find(c => c.id === id).name
     if (window.confirm(`Do you want to delete ${contactName}`)) {
       phonebookService
         .deleteContact(id)
         .then((response) => {
-          response.status !== 200 ? 
-            console.log('delete failed', response) : 
-            setContacts(contacts.filter(contact => contact.id !== id))
+          showMessage(`${contactName} deleted successfully.`, 'informational')
+          return setContacts(contacts.filter(contact => contact.id !== id))
+        })
+        .catch(error => {
+          showMessage(`Error ${contactName} doesn't exist!`, 'error')
+          return setContacts(contacts.filter(contact => contact.id !== id))
         })
     }
   }
@@ -79,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notificationMessage} notificationStyle={notificationStyle}/>
       <Search searchFieldHandler={handleSearchField} searchName={searchName}/>
       <h1>add a new</h1>
       <Form 
