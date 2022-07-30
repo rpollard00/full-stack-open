@@ -1,10 +1,10 @@
 import './App.css';
-import axios from 'axios'
 
 import { useState, useEffect } from 'react';
 import Form from './components/Form'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
+import phonebookService from './services/phonebookService';
 
 
 const App = () => {
@@ -14,9 +14,9 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/contacts')
-      .then(response => setContacts(response.data))
+    phonebookService
+      .getAll()
+      .then(contactList => setContacts(contactList))
   }
 
   useEffect(hook, []) //empty array in 2nd element tells it to only fetch once
@@ -33,16 +33,34 @@ const App = () => {
     } 
     else {
       const contactObject = {
-        id: contacts.length + 1,
+        //id: contacts.length + 1,
         name: newContact,
         phone: newPhone,
       }
-
-      setContacts(contacts.concat(contactObject));
+      phonebookService
+        .postContact(contactObject)
+        .then(createdContact => setContacts(contacts.concat(createdContact)))
     }
-
     setNewContact('')
     setNewPhone('')
+  }
+
+  const deleteHandler = (id) => {
+    console.log('Does this work?', id);
+    const contactName = contacts.find(c => c.id === id).name
+    if (window.confirm(`Do you want to delete ${contactName}`)) {
+      /// do delete action
+      // post the delete, get the list again, setContact to the new list
+      phonebookService
+        .deleteContact(id)
+        .then((response) => {
+          console.log('delete', response)
+          response.status !== 200 ? console.log('delete failed', response) : setContacts(contacts.filter(contact => contact.id !== id))
+        })
+        
+  
+        
+    }
   }
 
   const handleNameField = event => setNewContact(event.target.value)
@@ -67,7 +85,9 @@ const App = () => {
         contactHandler={addNewContact}
       />
       <h1>Numbers</h1>
-      <Contacts contacts={contactsToShow} />
+      <Contacts 
+        contacts={contactsToShow} 
+        handleDelete={deleteHandler}/>
     </div>
   );
 }
