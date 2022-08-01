@@ -3,14 +3,14 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import Form from './components/Form'
 import Search from './components/Search'
-import Contacts from './components/Contacts'
+import Persons from './components/Persons'
 import phonebookService from './services/phonebookService';
 import Notification from './components/Notification';
 
 
 const App = () => {
-  const [contacts, setContacts] = useState([])
-  const [newContact, setNewContact] = useState('')
+  const [persons, setPersons] = useState([])
+  const [newPerson, setNewPerson] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchName, setSearchName] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
@@ -19,49 +19,49 @@ const App = () => {
   const hook = () => {
     phonebookService
       .getAll()
-      .then(contactList => setContacts(contactList))
+      .then(personList => setPersons(personList))
   }
 
   useEffect(hook, []) //empty array in 2nd element tells it to only fetch once
 
-  const addNewContact = (event) => {
+  const addNewPerson = (event) => {
     event.preventDefault()
-    const existingContact = contacts.find((contact) => (contact.name.toLowerCase() === newContact.toLowerCase()))
+    const existingPerson = persons.find((person) => (person.name.toLowerCase() === newPerson.toLowerCase()))
   
-    if (existingContact) {
-      // update existing contact
-      updateHandler(existingContact)
+    if (existingPerson) {
+      // update existing Person
+      updateHandler(existingPerson)
     } 
     else {
-      const contactObject = {
-        name: newContact,
+      const personObject = {
+        name: newPerson,
         phone: newPhone,
       }
       phonebookService
-        .postContact(contactObject)
-        .then(createdContact => {
-          showMessage(`Added new contact ${createdContact.name}`, 'informational')
-          return setContacts(contacts.concat(createdContact)
+        .postPerson(personObject)
+        .then(createdPerson => {
+          showMessage(`Added new Person ${createdPerson.name}`, 'informational')
+          return setPersons(persons.concat(createdPerson)
         )})
         
     }
     
-    setNewContact('')
+    setNewPerson('')
     setNewPhone('')
   }
 
-  const updateHandler = contactToUpdate => {
-    if (window.confirm(`Update contact ${contactToUpdate.name}?`)) {
-      const contactUpdateObj = { ...contactToUpdate, phone: newPhone}
+  const updateHandler = personToUpdate => {
+    if (window.confirm(`Update person ${personToUpdate.name}?`)) {
+      const personUpdateObj = { ...personToUpdate, phone: newPhone}
       phonebookService
-        .updateContact(contactUpdateObj.id, contactUpdateObj)
-        .then(updatedContact =>  {
-          showMessage(`Updated contact ${updatedContact.name}: Phone ${updatedContact.phone}`, 'informational')
-          return setContacts(contacts.map(contact => contact.id !== updatedContact.id ? contact : updatedContact ))
+        .updatePerson(personUpdateObj.id, personUpdateObj)
+        .then(updatedPerson =>  {
+          showMessage(`Updated person ${updatedPerson.name}: Phone ${updatedPerson.phone}`, 'informational')
+          return setPersons(persons.map(person => person.id !== updatedPerson.id ? person : updatedPerson ))
         })
         .catch(error => {
-          showMessage(`Error ${contactToUpdate.name} doesn't exist!`, 'error')
-          setContacts(contacts.filter(contact => contact.id !== contactToUpdate.id))
+          showMessage(`Error ${personToUpdate.name} doesn't exist!`, 'error')
+          setPersons(persons.filter(person => person.id !== personToUpdate.id))
       })
     }
   }
@@ -72,27 +72,27 @@ const App = () => {
 
   }
   const deleteHandler = (id) => {
-    const contactName = contacts.find(c => c.id === id).name
-    if (window.confirm(`Do you want to delete ${contactName}`)) {
+    const personName = persons.find(c => c.id === id).name
+    if (window.confirm(`Do you want to delete ${personName}`)) {
       phonebookService
-        .deleteContact(id)
+        .deletePerson(id)
         .then((response) => {
-          showMessage(`${contactName} deleted successfully.`, 'informational')
-          return setContacts(contacts.filter(contact => contact.id !== id))
+          showMessage(`${personName} deleted successfully.`, 'informational')
+          return setPersons(persons.filter(person => person.id !== id))
         })
         .catch(error => {
-          showMessage(`Error ${contactName} doesn't exist!`, 'error')
-          return setContacts(contacts.filter(contact => contact.id !== id))
+          showMessage(`Error ${personName} doesn't exist!`, 'error')
+          return setPersons(persons.filter(person => person.id !== id))
         })
     }
   }
 
-  const handleNameField = event => setNewContact(event.target.value)
+  const handleNameField = event => setNewPerson(event.target.value)
   const handlePhoneField = event => setNewPhone(event.target.value)
   const handleSearchField = (event) => setSearchName(event.target.value)
   
-  const contactsToShow = contacts
-    .filter(contact => contact.name.toLowerCase()
+  const personsToShow = persons
+    .filter(person => person.name.toLowerCase()
     .includes(searchName.toLowerCase())
     );
   
@@ -105,13 +105,13 @@ const App = () => {
       <Form 
         nameFieldHandler={handleNameField}
         phoneFieldHandler={handlePhoneField}
-        contactName={newContact}
+        personName={newPerson}
         phoneNumber={newPhone}
-        contactHandler={addNewContact}
+        personHandler={addNewPerson}
       />
       <h1>Numbers</h1>
-      <Contacts 
-        contacts={contactsToShow} 
+      <Persons
+        persons={personsToShow} 
         handleDelete={deleteHandler}/>
     </div>
   );

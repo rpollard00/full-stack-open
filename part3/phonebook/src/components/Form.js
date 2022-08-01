@@ -3,9 +3,9 @@ import React from 'react'
 const Form = (props) => {
   return (
     <form>
-      <Input label="name" onChangeHandler={props.nameFieldHandler} value={props.contactName} />
+      <Input label="name" onChangeHandler={props.nameFieldHandler} value={props.personName} />
       <Input label="phone" onChangeHandler={props.phoneFieldHandler} value={props.phoneNumber} />
-      <Button type="submit" text="add" onClickHandler={props.contactHandler} />
+      <Button type="submit" text="add" onClickHandler={props.personHandler} />
     </form>
   )
 }
