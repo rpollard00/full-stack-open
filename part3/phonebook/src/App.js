@@ -91,6 +91,7 @@ const App = () => {
   const handlePhoneField = event => setNewPhone(event.target.value)
   const handleSearchField = (event) => setSearchName(event.target.value)
   
+
   const personsToShow = persons
     .filter(person => person.name.toLowerCase()
     .includes(searchName.toLowerCase())

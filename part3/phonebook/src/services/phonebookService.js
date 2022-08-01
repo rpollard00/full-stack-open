@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = "http://localhost:3001/persons"
+const baseUrl = "http://localhost:3001/api/persons"
 
 // getAll
 const getAll = () => {
@@ -8,8 +8,8 @@ const getAll = () => {
 }
 // addPerson
 // post to the base url
-const postPerson = (PersonObj) => {
-  const request = axios.post(baseUrl, PersonObj)
+const postPerson = (personObj) => {
+  const request = axios.post(baseUrl, personObj)
   return request.then(response => response.data)
 }
 
