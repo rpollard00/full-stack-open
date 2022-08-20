@@ -30,7 +30,7 @@
     {
       "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
       "id": 3,
-      "votes": 1
+      "votes": 3
     },
     {
       "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
@@ -40,32 +40,37 @@
     {
       "content": "Premature optimization is the root of all evil.",
       "id": 5,
-      "votes": 1
+      "votes": 2
     },
     {
       "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
       "id": 6,
-      "votes": 3
+      "votes": 6
     },
     {
       "content": "This is a new one and it was added.",
-      "votes": 0,
+      "votes": 2,
       "id": 7
     },
     {
       "content": "This is not going to choke.",
-      "votes": 8,
+      "votes": 12,
       "id": 8
     },
     {
       "content": "I think this might work",
-      "votes": 3,
+      "votes": 6,
       "id": 9
     },
     {
       "content": "Yeah it totally broke last time...",
-      "votes": 2,
+      "votes": 3,
       "id": 10
+    },
+    {
+      "content": "Oh I'm fucking stupid....",
+      "votes": 13,
+      "id": 11
     }
   ]
 }

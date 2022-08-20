@@ -1,9 +1,7 @@
 /* eslint-disable react-redux/useSelector-prefer-selectors */
 import { useDispatch, useSelector } from 'react-redux'
 import { sortAnecdotes, voteFor } from '../reducers/anecdoteReducer'
-import { removeNotification, setNotification } from '../reducers/notificationReducer'
-
-let timer
+import { setNotification } from '../reducers/notificationReducer'
 
 const Anecdote = ({ anecdote, handleClick }) => {
   return (
@@ -26,14 +24,10 @@ const Anecdotes = () => {
   console.log('Anecdote', anecdotes[0])
   const filterText = useSelector(state => state.filter)
 
-  const handleClick = (anecdote) => {
+  const handleClick = async (anecdote) => {
     dispatch(voteFor(anecdote))
       .then(() => dispatch(sortAnecdotes()))
-    dispatch(setNotification(`You voted for '${anecdote.content}'`))
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      dispatch(removeNotification())
-    }, 5000)
+    await dispatch(setNotification(`You voted for '${anecdote.content}'`, 5))
   }
 
   return (

@@ -7,8 +7,6 @@ const Filter = (props) => {
   const filterText = useSelector(state => state.filter)
   const handleChange = event => {
     dispatch(setFilter(event.target.value))
-    console.log(`The thing changed ${event.target.value}`)
-
   }
 
   return (
