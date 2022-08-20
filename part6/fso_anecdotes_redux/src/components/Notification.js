@@ -1,3 +1,4 @@
+/* eslint-disable react-redux/useSelector-prefer-selectors */
 import { useSelector } from 'react-redux'
 
 const Notification = () => {

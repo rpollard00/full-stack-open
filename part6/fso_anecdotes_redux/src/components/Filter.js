@@ -7,7 +7,7 @@ const Filter = (props) => {
   const handleChange = event => {
     dispatch(setFilter(event.target.value))
     console.log(`The thing changed ${event.target.value}`)
-    
+
   }
 
   return (

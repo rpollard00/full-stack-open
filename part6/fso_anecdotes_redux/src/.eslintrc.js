@@ -4,11 +4,11 @@ module.exports = {
     'browser': true,
     'es6': true,
     'jest/globals': true,
-    'cypress/globals': true
   },
   'extends': [
     'eslint:recommended',
-    'plugin:react/recommended'
+    'plugin:react/recommended',
+    'plugin:react-redux/recommended'
   ],
   'parserOptions': {
     'ecmaFeatures': {
@@ -18,7 +18,7 @@ module.exports = {
     'sourceType': 'module'
   },
   'plugins': [
-    'react', 'jest', 'cypress'
+    'react', 'jest', 'react-redux'
   ],
   'rules': {
     'indent': [

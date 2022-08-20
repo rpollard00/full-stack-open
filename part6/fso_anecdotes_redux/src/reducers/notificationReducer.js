@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit'
 
-const notificationStart = { 
-  message: "This is the notification message",
-  style: "hidden",
+const notificationStart = {
+  message: 'This is the notification message',
+  style: 'hidden',
 }
 
 const notificationSlice = createSlice({
