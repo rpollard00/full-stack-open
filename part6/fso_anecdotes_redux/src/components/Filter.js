@@ -1,3 +1,4 @@
+/* eslint-disable react-redux/useSelector-prefer-selectors */
 import { useDispatch, useSelector } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 
