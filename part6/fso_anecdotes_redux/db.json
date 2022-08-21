@@ -76,6 +76,16 @@
       "content": "Hello to you",
       "votes": 0,
       "id": 12
+    },
+    {
+      "content": "Does it die???",
+      "votes": 1,
+      "id": 13
+    },
+    {
+      "content": "Does it notify?",
+      "votes": 0,
+      "id": 14
     }
   ]
 }

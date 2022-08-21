@@ -1,12 +1,10 @@
 /* eslint-disable react-redux/useSelector-prefer-selectors */
-import { useDispatch, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 
-const Filter = (props) => {
-  const dispatch = useDispatch()
-  const filterText = useSelector(state => state.filter)
+const Filter = ({ filterText, setFilter }) => {
   const handleChange = event => {
-    dispatch(setFilter(event.target.value))
+    setFilter(event.target.value)
   }
 
   return (
@@ -16,4 +14,21 @@ const Filter = (props) => {
   )
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return { filterText: state.filter, }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setFilter: value => {
+      dispatch(setFilter(value))
+    },
+  }
+}
+
+const ConnectedFilter = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filter)
+
+export default ConnectedFilter

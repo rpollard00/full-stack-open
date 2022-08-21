@@ -21,13 +21,12 @@ const Anecdotes = () => {
   const dispatch = useDispatch()
   //const anecdotes = useSelector(({ anecdotes }) => anecdotes.sort((a, b) => b.votes - a.votes))
   const anecdotes = useSelector(({ anecdotes }) => anecdotes)
-  console.log('Anecdote', anecdotes[0])
   const filterText = useSelector(state => state.filter)
 
-  const handleClick = async (anecdote) => {
+  const handleClick = (anecdote) => {
     dispatch(voteFor(anecdote))
       .then(() => dispatch(sortAnecdotes()))
-    await dispatch(setNotification(`You voted for '${anecdote.content}'`, 5))
+    dispatch(setNotification(`You voted for '${anecdote.content}'`, 5))
   }
 
   return (
