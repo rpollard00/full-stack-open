@@ -8,6 +8,8 @@ import {
   useParams
 } from 'react-router-dom';
 
+import { useField } from './hooks';
+
 const Menu = () => {
   const padding = {
     paddingRight: 5
@@ -63,24 +65,46 @@ const Footer = () => (
   </div>
 )
 
+
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const contentAll = useField('text')
+  const authorAll = useField('text')
+  const infoAll = useField('text')
+
+  const content = {
+    ...contentAll,
+    reset: undefined
+  }
+  const author = {
+    ...authorAll,
+    reset: undefined
+  }
+  const info = {
+    ...infoAll,
+    reset: undefined
+  }
+  
+
   const navigate = useNavigate()
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
-    props.notificationHandler(`a new anecdote ${content} created!`)
-    navigate('/')
-    
+    props.notificationHandler(`a new anecdote ${content.value} created!`)
+    navigate('/') 
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    contentAll.reset()
+    authorAll.reset()
+    infoAll.reset()
   }
 
   return (
@@ -89,17 +113,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
