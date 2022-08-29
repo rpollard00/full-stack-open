@@ -1,22 +1,24 @@
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from 'react';
+import Select from 'react-select';
 
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries";
 
-const AuthorForm = ({ setError }) => {
-  const [name, setName] = useState('')
+const AuthorForm = ({ setError, authors }) => {
+  //const [name, setName] = useState('')
   const [born, setBorn] = useState('')
+  const [name, setName] = useState(null)
 
   const [ editAuthor, result ] = useMutation(EDIT_AUTHOR, 
     { refetchQueries: [ {query: ALL_AUTHORS} ]}
   )
-
+  
   const submit = (event) => {
     event.preventDefault()
 
-    editAuthor({ variables: {name, born}})
+    editAuthor({ variables: {name: name.value, born}})
 
-    setName('')
+    setName(null)
     setBorn('')
   }
 
@@ -30,11 +32,13 @@ const AuthorForm = ({ setError }) => {
     <div>
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
-        <div>
-          name <input 
-            value={name} 
-            onChange={({ target }) => setName(target.value)}/>
-        </div>
+        <Select
+          value={name}
+          defaultValue={null}
+          onChange={setName} 
+          options={authors.map((a) => {
+            return ({ value: a.name, label: a.name })
+          })} />
         <div>
           born <input 
             type="number"
