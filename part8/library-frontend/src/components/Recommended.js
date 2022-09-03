@@ -1,14 +1,22 @@
 import { useQuery } from "@apollo/client"
+import { ALL_BOOKS_BY_GENRE } from "../queries"
 
 // Filter with gql....
 // use useQuery with variables where the genre filter for allBooks
 // is set to favoriteGenre
 
-const Books = ({ show, books, user }) => {
+const Books = ({ show, user }) => {
   const genre = user.favoriteGenre
+  const { loading, error, data } = useQuery(ALL_BOOKS_BY_GENRE, {
+    variables: { genre: genre }
+  })
 
   if (!show) {
     return null
+  }
+
+  if (loading) {
+    return <div>loading...</div>
   }
 
   return (
@@ -22,9 +30,8 @@ const Books = ({ show, books, user }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books
-            .filter(b => genre !== 'all' ? b.genres.includes(genre) : b )
-            .map((a) => (
+          {
+            data.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

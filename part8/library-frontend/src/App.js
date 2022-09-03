@@ -20,6 +20,10 @@ const App = () => {
     return <div>loading...</div>
   }
 
+  if (me.loading) {
+    return <div>loading...</div>
+  }
+
   if (books.loading) return <div>loading ...</div>
 
   const logout = () => {
@@ -62,7 +66,6 @@ const App = () => {
     )
   }
 
-  console.log('logged in user', me.data.username)
   return (
     <div>
       <div>
@@ -79,13 +82,13 @@ const App = () => {
         show={page === 'authors'} 
         setError={notify} 
       />
-      <Books books={books.data.allBooks} show={page === 'books'} />
+      <Books books={books.data.allBooks} show={page === 'books'}  user={me} />
       <Recommended 
         books={books.data.allBooks} 
         show={page === 'recommended'} 
         user={me.data.me} 
       />
-      <NewBook show={page === 'add'} setError={notify}/>
+      <NewBook show={page === 'add'} setError={notify} user={me.data.me}/>
     </div>
   )
 }

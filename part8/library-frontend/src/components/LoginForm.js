@@ -9,7 +9,7 @@ const LoginForm = ({ show, setToken, setError, setPage }) => {
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
-    }
+    },
   })
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const LoginForm = ({ show, setToken, setError, setPage }) => {
     event.preventDefault()
 
     login({ variables: { username, password }})
-    setPage('books')
+    await setPage('books')
   }
 
   if (!show) {
