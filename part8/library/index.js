@@ -106,7 +106,7 @@ const resolvers = {
     },
     allBooks: async (root, args) => {
       let authorObj
-      if (!args.author && !args.genre) {
+      if (!args.author && (!args.genre || args.genre === 'all')) {
         return Book.find({})
           .populate('author', { name: 1, born: 1, id: 1 })
       }
@@ -143,7 +143,7 @@ const resolvers = {
       }
       return []
     },
-    allAuthors: () => Author.find({}),
+    allAuthors: async () => Author.find({}),
   },
   Author: {
     bookCount: async (root) => {
