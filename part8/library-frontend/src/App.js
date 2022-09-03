@@ -4,7 +4,8 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
-import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import Recommended from './components/Recommended'
+import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -12,6 +13,7 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const authors = useQuery(ALL_AUTHORS)
   const books  = useQuery(ALL_BOOKS)
+  const me = useQuery(ME)
   const client = useApolloClient()
 
   if  (authors.loading) {
@@ -50,23 +52,39 @@ const App = () => {
           authors={authors.data.allAuthors} 
           show={page === 'authors'} 
           setError={notify} />
-        <LoginForm setToken={setToken} setPage={setPage} setError={notify} show={page === 'login'} />
+        <LoginForm 
+          setToken={setToken} 
+          setPage={setPage} 
+          setError={notify} 
+          show={page === 'login'} />
         <Books books={books.data.allBooks} show={page === 'books'} />
       </>
     )
   }
 
+  console.log('logged in user', me.data.username)
   return (
     <div>
       <div>
+        <p>Hello {me.data.me.username}</p>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
+        <button onClick={() => setPage('recommended')}>recommend</button>
         <button onClick={() => setPage('add')}>add book</button>
         <button onClick={logout}>logout</button>
       </div>
       <Notify errorMessage={errorMessage}></Notify>
-      <Authors authors={authors.data.allAuthors} show={page === 'authors'} setError={notify} />
+      <Authors 
+        authors={authors.data.allAuthors} 
+        show={page === 'authors'} 
+        setError={notify} 
+      />
       <Books books={books.data.allBooks} show={page === 'books'} />
+      <Recommended 
+        books={books.data.allBooks} 
+        show={page === 'recommended'} 
+        user={me.data.me} 
+      />
       <NewBook show={page === 'add'} setError={notify}/>
     </div>
   )
