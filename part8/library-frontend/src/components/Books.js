@@ -1,6 +1,9 @@
-import { useLazyQuery, useQuery } from "@apollo/client"
+import { useLazyQuery, useSubscription } from "@apollo/client"
+
 import { useEffect, useState } from 'react'
-import { ALL_BOOKS_BY_GENRE } from "../queries"
+import { ALL_BOOKS_BY_GENRE, BOOK_ADDED } from "../queries"
+
+import { updateCache } from "../App"
 
 // run the query when the genre Button is pressed
 // on initial load query all
@@ -11,7 +14,7 @@ const getGenres = (books) => {
   return [...new Set(genres.flat()), 'all']
 }
 
-const Books = ({ show, books, user }) => {
+const Books = ({ show, books, user, clientCache }) => {
   const [genres, setGenres] = useState([])
   const [genre, setGenre] = useState('all')
   const [
@@ -24,7 +27,18 @@ const Books = ({ show, books, user }) => {
   useEffect(() => {
     setGenres(getGenres(books))
     getBooks() // initial load books
+    
   },[books, genre, user, data]) // eslint-disable-line
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      console.log("BookAdded", addedBook)
+      
+      // only updates cache if the component is showing, otherwise it fails because its unloaded
+      if (show) updateCache(clientCache, { query: ALL_BOOKS_BY_GENRE, variables: { genre: genre } }, addedBook )
+    }
+  })
 
   if (loading) {
     return <div>loading...</div>

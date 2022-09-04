@@ -1,11 +1,11 @@
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
 import Recommended from './components/Recommended'
-import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS, ALL_BOOKS_BY_GENRE, BOOK_ADDED, ME } from './queries'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -15,6 +15,16 @@ const App = () => {
   const books  = useQuery(ALL_BOOKS)
   const me = useQuery(ME)
   const client = useApolloClient()
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      notify(`${addedBook.title} added`)
+      console.log("Book added", addedBook)
+      updateCache(client.cache, { query: ALL_BOOKS_BY_GENRE, variables: { genre: "all" } }, addedBook)
+
+    }
+  })
 
   if  (authors.loading) {
     return <div>loading...</div>
@@ -61,7 +71,7 @@ const App = () => {
           setPage={setPage} 
           setError={notify} 
           show={page === 'login'} />
-        <Books books={books.data.allBooks} show={page === 'books'} />
+        <Books books={books.data.allBooks} show={page === 'books'} clientCache={client.cache}/>
       </>
     )
   }
@@ -91,6 +101,20 @@ const App = () => {
       <NewBook show={page === 'add'} setError={notify} user={me.data.me}/>
     </div>
   )
+}
+
+export const updateCache = (cache, query, addedBook) => {
+  return cache.updateQuery(query, ({ allBooks }) => {
+    console.log("cache", cache)
+    console.log("query", query)
+    console.log("allBooks", allBooks)
+    console.log("addedBook", addedBook)
+    const updatedAllBooks = allBooks.concat(addedBook)
+    console.log("allBooksConcat", updatedAllBooks)
+    return {
+      allBooks: updatedAllBooks
+    }
+  })
 }
 
 const Notify = ({ errorMessage }) => {
