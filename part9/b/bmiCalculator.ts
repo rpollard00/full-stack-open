@@ -4,7 +4,10 @@ interface BmiArgs {
   weightKg: number,
 }
 
-const calculateBmi = (heightCm: number, weightKg: number): string => {
+export const calculateBmi = (heightCm: number, weightKg: number): string => {
+  if (isNaN(Number(heightCm)) || isNaN(weightKg)) {
+    throw new Error("Found non-numeric value in provided args")
+  }
   // formula for BMI kg/m^2
   const heightM: number = (heightCm/100)
   const Bmi = weightKg/heightM**2;
@@ -20,7 +23,7 @@ const calculateBmi = (heightCm: number, weightKg: number): string => {
     message = 'obese';
   }
 
-  return `BMI of ${Bmi} is considered ${message}.`;
+  return `BMI of ${Bmi.toFixed(2)} is considered ${message}.`;
 }
 
 const parseBmiArguments = (args: Array<string>): BmiArgs => {
