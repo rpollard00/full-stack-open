@@ -16,7 +16,7 @@ const calculateBmi = (heightCm: number, weightKg: number): string => {
     message = 'normal, healthy weight';
   } else if (Bmi > 24.9 && Bmi <= 29.9) {
     message = 'overweight';
-  } else if (Bmi > 30) {
+  } else {
     message = 'obese';
   }
 
