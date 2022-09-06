@@ -8,25 +8,25 @@ app.get('/hello', (_req, res) => {
 });
 
 app.get('/bmi', (req, res) => {
-  const height: number = Number(req.query.height)
-  const weight: number = Number(req.query.weight)
+  const height = Number(req.query.height);
+  const weight = Number(req.query.weight);
   try {
-    const bmi = calculateBmi(height, weight)
+    const bmi = calculateBmi(height, weight);
     res.status(200).send({
       height,
       weight,
       bmi
-    })
+    });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ?
       error.message :
       'bad request';
 
-      res.status(400).send({ error: errorMessage }) 
+      res.status(400).send({ error: errorMessage }); 
   }
 
 
-})
+});
 
 const PORT = 3003;
 
