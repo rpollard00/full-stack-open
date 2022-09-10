@@ -45,6 +45,7 @@ export const toNewPatientEntry = ({name, dateOfBirth, ssn, gender, occupation}: 
     ssn: parseString(ssn),
     gender: parseGender(gender),
     occupation: parseString(occupation),
+    entries: [],
   };
 
   return newPatient;

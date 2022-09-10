@@ -9,6 +9,16 @@ router.get('/', (_req, res) => {
   res.status(200).send(patientsService.getNonSensitiveEntries());
 });
 
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  const patientById = patientsService.getById(id);
+  if (patientById) {
+    res.status(200).send(patientById);
+  } else {
+    res.status(404).send({ error: `ID: ${id} not found`});
+  }
+});
+
 router.post('/', (req, res) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
