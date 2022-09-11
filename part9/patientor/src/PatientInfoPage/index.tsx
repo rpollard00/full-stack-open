@@ -4,18 +4,27 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
 import { setCurrentPatient, useStateValue } from "../state";
-import { Diagnosis, Entry, Patient } from "../types";
-
-// interface PatientProps {
-//   id: string,
-// }
+import { Entry, Patient } from "../types";
 
 interface DiagnosisProps {
-  diagnoses: Diagnosis[];
+  code: string;
 }
 
-const Diagnosis = ({ diagnoses }: DiagnosisProps) => {
-  return (<></>);
+const DiagnosisEntry = ({ code }: DiagnosisProps) => {
+  // lookup the entry from the code...
+  const [{ diagnoses },] = useStateValue();
+
+  const getDiagnosisName = (code: string): string | undefined => {
+    const diagnosis = Object.values(diagnoses).find(c => c.code === code); //find the diagnosis
+
+    if (!diagnosis) return undefined; // guard against undefined
+      
+    return diagnosis.name;
+  };
+
+  if (!diagnoses) return null;
+
+  return (<p>{code} {getDiagnosisName(code)}</p>);
 };
 
 interface EntriesProps {
@@ -35,7 +44,9 @@ const Entries = ({ entries } : EntriesProps) => {
                 ?
                 <ul>
                   {e.diagnosisCodes.map(c => {
-                    return (<li key={c}>{c}</li>);
+                      return (
+                        <DiagnosisEntry key={c} code={c} />
+                      );
                     })
                   }
                 </ul>
@@ -68,7 +79,6 @@ const PatientInfoPage = () => {
       }
       
     };
-    console.log("id", id);
     void fetchPatient();
   }, [id]);
   
