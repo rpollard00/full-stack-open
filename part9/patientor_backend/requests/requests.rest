@@ -1,0 +1,59 @@
+GET http://localhost:3001/api/patients
+
+###
+
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+        "date": "2022-08-05",
+        "type": "OccupationalHealthcare",
+        "specialist": "Mad House",
+        "employerName": "NoPD",
+        "diagnosisCodes": [
+          "Z57.1",
+          "Z74.3",
+          "M51.2"
+        ],
+        "description": "This is a test protection gear. Very minor radiation poisoning. ",
+        "sickLeave": {
+          "startDate": "2022-08-05",
+          "endDate": "2022-08-28"
+        }
+}
+
+###
+
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+        "date": "2022-08-05",
+        "type": "HealthCheck",
+        "specialist": "Mad House",
+        "employerName": "NoPD",
+        "diagnosisCodes": [
+          "Z57.1"
+        ],
+        "description": "This is a test protection gear. Very minor radiation poisoning. ",
+        "healthCheckRating": 3
+}
+
+###
+
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+        "date": "2022-08-05",
+        "type": "OccupationalHealthcare",
+        "specialist": "Mad House",
+        "employerName": "NoPD",
+        "diagnosisCodes": [
+          "Z57.1"
+        ],
+        "description": "This is a test protection gear. Very minor radiation poisoning. ",
+        "employerName": "A swarm of bees",
+        "sickLeaveStart": "2022-12-05",
+        "sickLeaveEnd": "2022-12-22"
+}

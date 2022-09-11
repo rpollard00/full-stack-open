@@ -50,3 +50,7 @@ export const toNewPatientEntry = ({name, dateOfBirth, ssn, gender, occupation}: 
 
   return newPatient;
 };
+
+export const assertNever = (val: never): never => {
+  throw new Error(`Unexpected member ${JSON.stringify(val)}`);
+};

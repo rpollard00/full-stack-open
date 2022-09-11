@@ -36,4 +36,23 @@ router.post('/', (req, res) => {
   
 });
 
+router.post('/:id/entries', (req, res) => {
+  const id = req.params.id;
+
+  console.log("hit the thingy");
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const addedPatientJournalEntry = patientsService.addEntry(id, req.body);
+
+    res.json(addedPatientJournalEntry);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error
+    ? `Something went wrong: ${error.message}`
+    : `Something went wrong.`; 
+
+    res.status(400).send(errorMessage);
+  }
+
+});
+
 export default router;
