@@ -181,12 +181,17 @@ const PatientInfoPage = () => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
+      
+      console.log("Values", values);
+      
+      //const entry: Entry = parseEntry(values);
+      //console.log("Entry", entry);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
       );
-      //dispatch(add(newPatient));
+      //dispatch(add(newEntry));
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {

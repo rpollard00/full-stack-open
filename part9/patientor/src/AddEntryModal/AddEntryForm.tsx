@@ -1,17 +1,18 @@
 import { Button, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 import { Field, FieldProps, Form, Formik } from "formik";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { SetStateAction } from "react";
 
 //import { DiagnosisSelection } from "../AddPatientModal/FormField";
-import { useState } from "react";
 import { TextField } from "../AddPatientModal/FormField";
-import { Entry } from "../types";
+import { RawEntry } from "../types";
 
 /*
  * use type NewEntry, but omit id,
  * because those are irrelevant for new patient object.
  */
-export type EntryFormValues = Omit<Entry, "id">;
+//export type EntryFormValues = Omit<Entry, "id">;
+export type EntryFormValues = Omit<RawEntry, "id">;
 
 export type EntryTypeOption = {
   value: string;
@@ -22,106 +23,61 @@ type SelectEntryFieldProps = {
   name: string;
   label: string;
   options: EntryTypeOption[];
-  entryType: string;
-  setType: React.Dispatch<SetStateAction<string>>;
+  //entryType: string;
+  //setType: React.Dispatch<SetStateAction<string>>;
 };
 
 const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
 
-export const SelectEntryField = ({ name, label, options, entryType, setType }: SelectEntryFieldProps) => {
-  console.log("Entry Type", entryType);
+// export const SelectEntryField = ({ name, label, options, entryType, setType }: SelectEntryFieldProps) => {
+//   console.log("Entry Type", entryType);
 
-  const handleType = (event: any): void => {
-    setType(event.target.value as string);
-  };
+//   const handleType = (event: any): void => {
+//     setType(event.target.value as string);
+//   };
 
-  return (
-  <>
-    <InputLabel>{label}</InputLabel>
-    <Field
-      fullWidth
-      style={{ marginBottom: "0.5em" }}
-      label={label}
-      component={FormikSelect}
-      name={name}
-      value={entryType}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onChange={(event: any) => {handleType(event);}}
+//   return (
+//   <>
+//     <InputLabel>{label}</InputLabel>
+//     <Field
+//       fullWidth
+//       style={{ marginBottom: "0.5em" }}
+//       label={label}
+//       component={FormikSelect}
+//       name={name}
+//       value={entryType}
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//       onChange={(event: any) => {handleType(event);}}
 
-    >
-      {options.map((option) => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
-    </Field>
-  </>
-);};
+//     >
+//       {options.map((option) => (
+//         <MenuItem key={option.value} value={option.value}>
+//           {option.label}
+//         </MenuItem>
+//       ))}
+//     </Field>
+//   </>
+// );};
 
-// const TypeFields = (props: any) => {
-//   const type: string = props.type as string;
-
-//   console.log("type is ", type);
-//   switch (type) {
-//     case "HealthCheck":
-//       return (            
-//         <Field
-//           label="HealthCheckRating"
-//           placeholder="0 - 4"
-//           name="HealthCheckRating"
-//           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//           component={TextField}
-//         />
-//       );
-//     case "OccupationalHealthCare":
-//       return (
-//         <>           
-//           <Field
-//             label="Employer Name"
-//             placeholder="Mikerowesoft"
-//             name="EmployerName"
-//             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//             component={TextField}
-//           />
-//           <Field
-//             label="Sick Leave Start"
-//             placeholder="YYYY-MM-DD"
-//             name="sickLeaveStart"
-//             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//             component={TextField}
-//           />
-//           <Field
-//             label="Sick Leave End"
-//             placeholder="YYYY-MM-DD"
-//             name="sickLeaveEnd"
-//             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//             component={TextField}
-//           />
-//         </>
-//       );
-//     case "Hospital":
-//       return (
-//         <>           
-//           <Field
-//             label="Discharge Date"
-//             placeholder="YYYY-MM-DD"
-//             name="dischargeDate"
-//             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//             component={TextField}
-//           />
-//           <Field
-//             label="Discharge Criteria"
-//             placeholder="Not bleeding..."
-//             name="dischargeCriteria"
-//             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//             component={TextField}
-//           />
-//         </>
-//       );
-//     default:
-//       return null;
-//   }
-// };
+export const SelectEntryField = ({ name, label, options }: SelectEntryFieldProps) => {
+    return (
+    <>
+      <InputLabel>{label}</InputLabel>
+      <Field
+        fullWidth
+        style={{ marginBottom: "0.5em" }}
+        label={label}
+        component={FormikSelect}
+        name={name}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Field>
+    </>
+  );};
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -129,36 +85,37 @@ interface Props {
 }
 
 const entryTypeOptions: EntryTypeOption[] = [
-  { value: "HealthCheck", label: "Health Check"},
+  { value: "HealthCheck", label: "HealthCheck"},
   { value: "Hospital", label: "Hospital"},
-  { value: "OccupationalHealthCare", label: "Occupational"},
+  { value: "OccupationalHealthcare", label: "Occupational"},
 ];
 
 export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [entryType, setEntryType] = useState<string>('HealthCheck');
+  const initialValues: EntryFormValues = {
+    description: "",
+    date: "",
+    specialist: "",
+    diagnosisCodes: [],
+    type: 'HealthCheck',
+    healthCheckRating: 2,
+    employerName: "",
+    sickLeave: { startDate: "", endDate: "" },
+    discharge: { date: "", criteria: ""},
+    //sickLeaveStart: "",
+    //sickLeaveEnd: "",
+    //dischargeDate: "",
+    //dischargeCriteria: "",
+  };
 
   return (
     <Formik
-      initialValues={{
-        description: "",
-        date: "",
-        specialist: "",
-        diagnosisCodes: [],
-        type: 'HealthCheck',
-        healthCheckRating: "",
-        employerName: "",
-        sickLeaveStart: "",
-        sickLeaveEnd: "",
-        dischargeDate: "",
-        dischargeCriteria: "",
-      }}
+      initialValues={initialValues}
       onSubmit={onSubmit}
       // validate={(values) => {
       //   const requiredError = "Field is required";
       //   const errors: { [field: string]: string } = {};
       //   if (!values.name) {
-      //     errors.name = requiredError;
+      //     errors.name = requiredError;df
       //   }
       //   if (!values.ssn) {
       //     errors.ssn = requiredError;
@@ -172,7 +129,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       //   return errors;
       // }}
     >
-      {({ isValid, dirty }) => {
+      {({ isValid, dirty, values }) => {
         return (
           <Form className="form ui">
             <Field
@@ -196,9 +153,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               component={TextField}
             />
-            <SelectEntryField label="Entry Type" name="type" options={entryTypeOptions} entryType={entryType} setType={setEntryType}/>
+            {/* <SelectEntryField label="Entry Type" name="type" options={entryTypeOptions} entryType={entryType} setType={setEntryType}/> */}
+            <SelectEntryField label="Entry Type" name="type" options={entryTypeOptions} />
             {
-              entryType === "HealthCheck" && (
+              values.type === "HealthCheck" && (
                 <Field
                 label="HealthCheckRating"
                 placeholder="0 - 4"
@@ -208,26 +166,26 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               /> 
             )}
             {
-              entryType === "Hospital" && (
+              values.type === "Hospital" && (
                 <>           
                   <Field
                     label="Discharge Date"
                     placeholder="YYYY-MM-DD"
-                    name="dischargeDate"
+                    name="discharge.date"
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     component={TextField}
                   />
                   <Field
                     label="Discharge Criteria"
                     placeholder="Not bleeding..."
-                    name="dischargeCriteria"
+                    name="discharge.criteria"
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     component={TextField}
                   />
                 </>
             )}
             {
-              entryType === "OccupationalHealthCare" && (
+              values.type === "OccupationalHealthcare" && (
                 <>           
                   <Field
                     label="Employer Name"
@@ -239,14 +197,14 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                   <Field
                     label="Sick Leave Start"
                     placeholder="YYYY-MM-DD"
-                    name="sickLeaveStart"
+                    name="sickLeave.startDate"
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     component={TextField}
                   />
                   <Field
                     label="Sick Leave End"
                     placeholder="YYYY-MM-DD"
-                    name="sickLeaveEnd"
+                    name="sickLeave.endDate"
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     component={TextField}
                   />

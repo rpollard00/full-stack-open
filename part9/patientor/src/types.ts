@@ -48,6 +48,13 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   };
 }
 
+//export type RawEntry = BaseEntry & HospitalEntry & HealthCheckEntry & OccupationalHealthcareEntry;
+export interface RawEntry extends 
+  Omit<HospitalEntry, "type">,
+  Omit<HealthCheckEntry, "type">, 
+  Omit<OccupationalHealthcareEntry, "type"> {
+    type: "Hospital" | "HealthCheck" | "OccupationalHealthcare";
+}
 
 export type Entry = 
   | HospitalEntry
