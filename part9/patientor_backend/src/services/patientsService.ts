@@ -71,13 +71,17 @@ type HospitalEntryFields = {
   description: unknown, 
   date: unknown, 
   type: unknown, 
-  specialist: unknown, 
+  specialist: unknown,
+  discharge: {
+    date: unknown,
+    criteria: unknown,
+  },
   dischargeDate: unknown, 
   dischargeCriteria: unknown,
   diagnosisCodes: unknown[] 
 };
 
-const toNewHospitalEntry = ({ description, date, specialist, diagnosisCodes, dischargeDate, dischargeCriteria }: HospitalEntryFields): HospitalEntry => {
+const toNewHospitalEntry = ({ description, date, specialist, diagnosisCodes, discharge }: HospitalEntryFields): HospitalEntry => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const id: string = uuid();
 
@@ -89,8 +93,8 @@ const toNewHospitalEntry = ({ description, date, specialist, diagnosisCodes, dis
     specialist: specialist as string,
     diagnosisCodes: diagnosisCodes as Array<Diagnosis['code']>,
     discharge: {
-      date: dischargeDate as string,
-      criteria: dischargeCriteria as string,
+      date: discharge.date as string,
+      criteria: discharge.criteria as string,
     }
   };
 
@@ -104,12 +108,16 @@ type OccupationalHealthcareEntryFields = {
   type: unknown, 
   specialist: unknown, 
   employerName: unknown,
+  sickLeave: {
+    startDate: unknown,
+    endDate: unknown,
+  },
   sickLeaveStart?: unknown,
   sickLeaveEnd?: unknown,
   diagnosisCodes: unknown[] 
 };
 
-const toNewOccupationalHealthcareEntry = ({ description, date, specialist, diagnosisCodes, employerName, sickLeaveStart, sickLeaveEnd }: OccupationalHealthcareEntryFields): OccupationalHealthcareEntry => {
+const toNewOccupationalHealthcareEntry = ({ description, date, specialist, diagnosisCodes, employerName, sickLeave }: OccupationalHealthcareEntryFields): OccupationalHealthcareEntry => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const id: string = uuid();
 
@@ -123,12 +131,12 @@ const toNewOccupationalHealthcareEntry = ({ description, date, specialist, diagn
     employerName: employerName as string,
   };
 
-  if (sickLeaveStart && sickLeaveEnd) {
+  if (sickLeave.startDate && sickLeave.endDate) {
     return {
       ...newOccupationalHealthcareEntry,
       sickLeave: {
-        startDate: sickLeaveStart as string,
-        endDate: sickLeaveEnd as string,
+        startDate: sickLeave.startDate as string,
+        endDate: sickLeave.endDate as string,
       }
     };
   }
