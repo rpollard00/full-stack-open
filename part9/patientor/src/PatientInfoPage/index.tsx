@@ -1,14 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button } from "@material-ui/core";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import AddEntryModal from "../AddEntryModal";
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
 import { apiBaseUrl } from "../constants";
 import { setCurrentPatient, useStateValue } from "../state";
-import { Entry, Patient } from "../types";
+import { Entry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry, Patient } from "../types";
+import { assertNever } from "../utils";
 
 interface DiagnosisProps {
   code: string;
 }
+
+interface EntriesProps {
+  entries: Entry[],
+}
+
+interface EntryProps {
+  entry: Entry,
+}
+
+interface HealthCheckEntryProps {
+  entry: HealthCheckEntry,
+}
+
+interface HospitalEntryProps {
+  entry: HospitalEntry,
+}
+
+interface OccupationalEntryProps {
+  entry: OccupationalHealthcareEntry,
+}
+
 
 const DiagnosisEntry = ({ code }: DiagnosisProps) => {
   // lookup the entry from the code...
@@ -24,37 +49,98 @@ const DiagnosisEntry = ({ code }: DiagnosisProps) => {
 
   if (!diagnoses) return null;
 
-  return (<p>{code} {getDiagnosisName(code)}</p>);
+  return (<li>{code} {getDiagnosisName(code)}</li>);
 };
 
-interface EntriesProps {
-  entries: Entry[],
-}
+
+const BaseEntry = ({ entry }: EntryProps) => {
+  return (
+    <div key={entry.id}>
+      <p>{entry.date} - {entry.description}</p>
+      { entry.diagnosisCodes 
+        ?
+        <ul>
+          {entry.diagnosisCodes.map(c => {
+              return (
+                <DiagnosisEntry key={c} code={c} />
+              );
+            })
+          }
+        </ul>
+        : null
+      }
+    </div>
+  );
+};
+
+const BaseEntryFooter = ({ entry }: EntryProps) => {
+  return (
+    <p>diagnosis by {entry.specialist}</p>
+  );
+};
+
+
+const HealthCheckComp = ({ entry }: HealthCheckEntryProps) => {
+  return (
+    <div>
+      <BaseEntry entry={entry as Entry} />
+      Health Check Rating: {entry.healthCheckRating}<br/>
+      <BaseEntryFooter entry={entry} />
+      ----------------------------------------------------
+    </div>
+  );
+};
+
+const HospitalComp = ({ entry }: HospitalEntryProps) => {
+  return (
+    <div>
+      <BaseEntry entry={entry} />
+      Discharge Date: {entry.discharge.date}<br/>
+      Discharge Criteria: {entry.discharge.criteria}<br/>
+      <BaseEntryFooter entry={entry} />
+      ----------------------------------------------------
+    </div>
+  );
+};
+
+const OccupationalHealthcareComp = ({ entry }: OccupationalEntryProps) => {
+  return (
+    <div>
+      <BaseEntry entry={entry} />
+      Employer: {entry.employerName}<br/>
+      {
+        entry.sickLeave
+          ? <span>Sick Leave: {entry.sickLeave.startDate} to {entry.sickLeave.endDate}</span>
+          : null
+      }<br/>
+      <BaseEntryFooter entry={entry} />
+      --------------------------------------------------------------------
+    </div>
+  );
+};
+
+
+const EntryDetails = ({ entry }: EntryProps) => {
+  switch(entry.type) {
+    case "HealthCheck":
+      return (<HealthCheckComp entry={entry} />);
+    case "Hospital":
+      return (<HospitalComp entry={entry} />);
+    case "OccupationalHealthcare":
+      return (<OccupationalHealthcareComp entry={entry} />);
+    default:
+      return assertNever(entry);
+  }
+
+
+};
 
 const Entries = ({ entries } : EntriesProps) => {
   return (
     <div>
       <h2>entries</h2>
       {
-        entries.map(e => {
-          return (
-            <div key={e.id}>
-              <p>{e.date} - {e.description}</p>
-              { e.diagnosisCodes 
-                ?
-                <ul>
-                  {e.diagnosisCodes.map(c => {
-                      return (
-                        <DiagnosisEntry key={c} code={c} />
-                      );
-                    })
-                  }
-                </ul>
-                : null
-              }
-            </div>
-          );}
-        )
+        entries.map(e => <EntryDetails key={e.id} entry={e} />)
       }
     </div>
   );
@@ -63,6 +149,15 @@ const Entries = ({ entries } : EntriesProps) => {
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ currentPatient }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
   
   if (!id) return null; //guard against id not yet being assigned
 
@@ -84,14 +179,46 @@ const PatientInfoPage = () => {
   
   if (!currentPatient) return null;
 
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      //dispatch(add(newPatient));
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized axios error");
+        setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
+
   return (
     <div>
       <h2>{currentPatient.name}</h2>
       gender: {currentPatient.gender}<br />
       ssn: {currentPatient.ssn || "None"}<br />
       occupation: {currentPatient.occupation}<br />
-
-      <Entries entries={currentPatient.entries} />
+      { 
+        currentPatient.entries.length > 0
+          ? <Entries entries={currentPatient.entries} />
+          : null
+      }
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button variant="contained" onClick={() => openModal()}>
+        New Entry
+      </Button>
     </div>
   );
 };
