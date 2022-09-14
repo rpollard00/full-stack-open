@@ -5,11 +5,14 @@ import patientsRouter from './routes/patients';
 const app = express();
 app.use(express.json());
 
-const FE_URL = "http://localhost:3000";
+const FE_URL = 'http://localhost:3000';
 
 app.use((_req, res, next) => {
-  res.header("Access-Control-Allow-Origin", FE_URL);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', FE_URL);
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
 
