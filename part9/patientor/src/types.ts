@@ -5,13 +5,12 @@ export interface Diagnosis {
 }
 
 export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
 }
 
-
-export interface BaseEntry{
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -20,19 +19,19 @@ export interface BaseEntry{
 }
 
 export enum HealthCheckRating {
-  "Healthy" = 0,
-  "LowRisk" = 1,
-  "HighRisk" = 2,
-  "CriticalRisk" = 3,
+  'Healthy' = 0,
+  'LowRisk' = 1,
+  'HighRisk' = 2,
+  'CriticalRisk' = 3,
 }
 
 export interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
 export interface HospitalEntry extends BaseEntry {
-  type: "Hospital",
+  type: 'Hospital';
   discharge: {
     date: string;
     criteria: string;
@@ -40,7 +39,7 @@ export interface HospitalEntry extends BaseEntry {
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
+  type: 'OccupationalHealthcare';
   employerName: string;
   sickLeave: {
     startDate: string;
@@ -49,14 +48,14 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 //export type RawEntry = BaseEntry & HospitalEntry & HealthCheckEntry & OccupationalHealthcareEntry;
-export interface RawEntry extends 
-  Omit<HospitalEntry, "type">,
-  Omit<HealthCheckEntry, "type">, 
-  Omit<OccupationalHealthcareEntry, "type"> {
-    type: "Hospital" | "HealthCheck" | "OccupationalHealthcare";
+export interface RawEntry
+  extends Omit<HospitalEntry, 'type'>,
+    Omit<HealthCheckEntry, 'type'>,
+    Omit<OccupationalHealthcareEntry, 'type'> {
+  type: 'Hospital' | 'HealthCheck' | 'OccupationalHealthcare';
 }
 
-export type Entry = 
+export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
@@ -68,5 +67,5 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: Entry[]
+  entries: Entry[];
 }
