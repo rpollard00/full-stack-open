@@ -1,5 +1,6 @@
 import Constants from 'expo-constants'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { Link } from 'react-router-native'
 import theme from '../theme'
 import Text from './Text'
 
@@ -10,16 +11,18 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexGrow: 1,
-    flexShrink: 1,
+    flexShrink: 0,
     //marginBottom: 6,
     paddingStart: 10,
     paddingBottom: 10,
+    justifyContent: 'space-evenly',
     //marginHorizontal: 8,
     //borderRadius: 10,
   },
   tab: {
     display: 'flex',
     flexGrow: 1,
+    marginHorizontal: 6,
   },
   text: {
     alignSelf: 'center',
@@ -27,12 +30,14 @@ const styles = StyleSheet.create({
   },
 })
 
-const AppBarTab = ({ textContent, onPressFunction, ...props }) => {
+const AppBarTab = ({ textContent, onPressFunction, link, ...props }) => {
   return (
     <Pressable onPress={onPressFunction} {...props}>
-      <Text color="textLight" fontWeight="bold" style={styles.text}>
-        {textContent}
-      </Text>
+      <Link to={link}>
+        <Text color="textLight" fontWeight="bold" style={styles.text}>
+          {textContent}
+        </Text>
+      </Link>
     </Pressable>
   )
 }
@@ -40,20 +45,24 @@ const AppBarTab = ({ textContent, onPressFunction, ...props }) => {
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <AppBarTab
-        style={styles.tab}
-        textContent="Repositories"
-        onPressFunction={() => {
-          console.log('Pressed')
-        }}
-      />
-      <AppBarTab
-        style={styles.tab}
-        textContent="Test"
-        onPressFunction={() => {
-          console.log('Pressed')
-        }}
-      />
+      <ScrollView horizontal contentContainerStyle={styles.container}>
+        <AppBarTab
+          link="/"
+          style={styles.tab}
+          textContent="Repositories"
+          onPressFunction={() => {
+            console.log('Pressed')
+          }}
+        />
+        <AppBarTab
+          style={styles.tab}
+          link="/signin"
+          textContent="Sign-In"
+          onPressFunction={() => {
+            console.log('Pressed')
+          }}
+        />
+      </ScrollView>
     </View>
   )
 }

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
   tag: {
     view: {
-      backgroundColor: '#0366d6',
+      backgroundColor: theme.colors.primary,
       padding: 8,
       alignSelf: 'flex-start',
       borderRadius: 8,

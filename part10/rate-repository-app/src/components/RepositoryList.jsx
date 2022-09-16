@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.elementBackground,
     margin: 5,
     borderRadius: 10,
   },
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     width: '100%',
     //paddingLeft: 10,
     flexWrap: 'wrap',
-    //backgroundColor: 'red',
   },
   heading: {
     display: 'flex',
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   statsText: {
-    //backgroundColor: 'red',
     flexGrow: 0,
     padding: 4,
     textAlign: 'center',
