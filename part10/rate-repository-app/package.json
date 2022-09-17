@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "wsl": "REACT_NATIVE_PACKAGER_HOSTNAME=$(netsh.exe interface ip show address 'Ethernet' | grep 'IP Address' | sed -r 's/^.*IP Address:\\W*//') expo start"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.0",

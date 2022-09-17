@@ -1,5 +1,5 @@
 {
-  "plugins": ["react", "react-native"],
+  "plugins": ["react", "react-native", "formik"],
   "settings": {
     "react": {
       "version": "detect"

@@ -1,7 +1,29 @@
 import { Formik, useField } from 'formik'
-import { Pressable, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+import theme from '../theme'
 import FormikTextInput from './FormikTextInput'
 import Text from './Text'
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: theme.colors.elementBackground,
+    paddingTop: 10,
+  },
+  button: {
+    height: 50,
+    backgroundColor: theme.colors.primary,
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: theme.margins.elementMargin,
+    borderRadius: theme.borders.elementRadius,
+  },
+  buttonText: {
+    fontSize: theme.fontSizes.inputField,
+    fontWeight: theme.fontWeights.bold,
+  },
+})
 
 const initialValues = {
   username: '',
@@ -10,17 +32,21 @@ const initialValues = {
 
 const SignInForm = ({ onSubmit }) => {
   const [usernameField, usernameMeta, usernameHelpers] = useField('username')
+  const [passwordField, passwordMeta, passwordHelpers] = useField('password')
 
   return (
-    <View>
-      <TextInput
-        placeholder="username"
-        value={usernameField.value}
-        onChangeText={(text) => usernameHelpers.setValue(text)}
+    <View style={styles.container}>
+      <FormikTextInput name="username" placeholder="Username" />
+      <FormikTextInput
+        name="password"
+        placeholder="Password"
+        secureTextEntry={true}
       />
-      {/* <Pressable onPress={handleSubmit}>
-        <Text>Login</Text>
-      </Pressable> */}
+      <Pressable style={styles.button} onPress={onSubmit}>
+        <Text color="textLight" style={styles.buttonText}>
+          Login
+        </Text>
+      </Pressable>
     </View>
   )
 }
@@ -29,10 +55,10 @@ const SignIn = () => {
   //const [heightField, heightMeta, heightHelpers] = useField(']');
   const onSubmit = (values) => {
     const username = values.username
-    //const password = values.password
+    const password = values.password
 
-    if (username) {
-      console.log(`Username: ${username}, Password `)
+    if (username && password) {
+      console.log(`Username: ${username}, Password ${password}`)
     }
   }
 

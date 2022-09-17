@@ -12,6 +12,7 @@ const theme = {
   fontSizes: {
     body: 14,
     subheading: 16,
+    inputField: 18,
   },
   fonts: {
     main: 'System',
@@ -19,6 +20,12 @@ const theme = {
   fontWeights: {
     normal: '400',
     bold: '700',
+  },
+  borders: {
+    elementRadius: 8,
+  },
+  margins: {
+    elementMargin: 8,
   },
 }
 
