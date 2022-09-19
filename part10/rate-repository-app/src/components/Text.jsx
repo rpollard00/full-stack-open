@@ -63,8 +63,6 @@ export const Tag = ({ textContent, ...props }) => {
 }
 
 export const Subheading = ({ ...props }) => {
-  console.log(styles.colorTextSecondary)
-
   return (
     <Text
       fontSize="subheading"
