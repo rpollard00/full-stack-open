@@ -1,6 +1,6 @@
 import { Formik, useField } from 'formik'
-import { useState } from 'react'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { Navigate, useNavigate } from 'react-router-native'
 import * as Yup from 'yup'
 import { useSignIn } from '../hooks/useSignIn'
 import theme from '../theme'
@@ -62,6 +62,7 @@ const SignInForm = ({ onSubmit }) => {
 
 const SignIn = () => {
   const [signIn] = useSignIn()
+  const navigate = useNavigate()
   //const [heightField, heightMeta, heightHelpers] = useField(']');
 
   const onSubmit = async (values) => {
@@ -71,8 +72,9 @@ const SignIn = () => {
     try {
       const { data } = await signIn({ username, password })
       console.log('Token:', data.authenticate.accessToken)
-      const token = new AuthStorage('auth')
-      token.setAccessToken(data.authenticate.accessToken)
+      navigate('/')
+      // const token = new AuthStorage('auth')
+      // token.setAccessToken(data.authenticate.accessToken)
     } catch (e) {
       console.log('ERROR ', e)
     }
