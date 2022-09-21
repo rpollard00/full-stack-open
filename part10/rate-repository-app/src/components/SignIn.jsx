@@ -1,7 +1,10 @@
 import { Formik, useField } from 'formik'
+import { useState } from 'react'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import * as Yup from 'yup'
+import { useSignIn } from '../hooks/useSignIn'
 import theme from '../theme'
+import AuthStorage from '../utils/authStorage'
 import FormikTextInput from './FormikTextInput'
 import Text from './Text'
 
@@ -58,13 +61,20 @@ const SignInForm = ({ onSubmit }) => {
 }
 
 const SignIn = () => {
+  const [signIn] = useSignIn()
   //const [heightField, heightMeta, heightHelpers] = useField(']');
-  const onSubmit = (values) => {
+
+  const onSubmit = async (values) => {
     const username = values.username
     const password = values.password
 
-    if (username && password) {
-      console.log(`Username: ${username}, Password ${password}`)
+    try {
+      const { data } = await signIn({ username, password })
+      console.log('Token:', data.authenticate.accessToken)
+      const token = new AuthStorage('auth')
+      token.setAccessToken(data.authenticate.accessToken)
+    } catch (e) {
+      console.log('ERROR ', e)
     }
   }
 

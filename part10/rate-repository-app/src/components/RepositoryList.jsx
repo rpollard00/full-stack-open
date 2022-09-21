@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { FlatList, Image, ScrollView, StyleSheet, View } from 'react-native'
 import useRepositories from '../hooks/useRepositories'
 import theme from '../theme'
+import AuthStorage from '../utils/authStorage'
 
 import Text, { Subheading, Tag } from './Text'
 
