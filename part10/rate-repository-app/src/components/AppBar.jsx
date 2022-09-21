@@ -1,6 +1,10 @@
+import { useQuery } from '@apollo/client'
 import Constants from 'expo-constants'
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
-import { Link } from 'react-router-native'
+import { Link, useNavigate } from 'react-router-native'
+import { apolloClient } from '../../App'
+import { ME } from '../graphql/queries'
+import useAuthStorage from '../hooks/useAuthStorage'
 import theme from '../theme'
 import Text from './Text'
 
@@ -30,10 +34,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const AppBarTab = ({ textContent, onPressFunction, link, ...props }) => {
+const AppBarTab = ({ textContent, onPress, link, ...props }) => {
   return (
-    <Pressable onPress={onPressFunction} {...props}>
-      <Link to={link}>
+    <Pressable {...props}>
+      <Link to={link} onPress={onPress}>
         <Text color="textLight" fontWeight="bold" style={styles.text}>
           {textContent}
         </Text>
@@ -43,6 +47,18 @@ const AppBarTab = ({ textContent, onPressFunction, link, ...props }) => {
 }
 
 const AppBar = () => {
+  const me = useQuery(ME)
+  const auth = useAuthStorage()
+  const navigate = useNavigate()
+
+  const signout = async () => {
+    console.log('signed out', me)
+    await auth.removeAccessToken()
+    apolloClient.resetStore()
+    console.log('signed out', me.data)
+    navigate('/')
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal contentContainerStyle={styles.container}>
@@ -50,18 +66,27 @@ const AppBar = () => {
           link="/"
           style={styles.tab}
           textContent="Repositories"
-          onPressFunction={() => {
-            console.log('Pressed')
+          onPress={() => {
+            console.log('Pressed Repo')
           }}
         />
-        <AppBarTab
-          style={styles.tab}
-          link="/signin"
-          textContent="Sign-In"
-          onPressFunction={() => {
-            console.log('Pressed')
-          }}
-        />
+        {!me.data.me ? (
+          <AppBarTab
+            style={styles.tab}
+            link="/signin"
+            textContent="Sign-In"
+            onPress={() => {
+              console.log('Pressed Sign-In')
+            }}
+          />
+        ) : (
+          <AppBarTab
+            style={styles.tab}
+            link="/"
+            textContent="Sign-Out"
+            onPress={signout}
+          />
+        )}
       </ScrollView>
     </View>
   )
