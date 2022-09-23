@@ -59,6 +59,8 @@ const AppBar = () => {
     navigate('/')
   }
 
+  if (me.loading) return
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal contentContainerStyle={styles.container}>
