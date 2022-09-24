@@ -82,12 +82,20 @@ const AppBar = () => {
             }}
           />
         ) : (
-          <AppBarTab
-            style={styles.tab}
-            link="/"
-            textContent="Sign-Out"
-            onPress={signout}
-          />
+          <>
+            <AppBarTab
+              style={styles.tab}
+              link="/createReview"
+              textContent="Create a review"
+              onPress={() => console.log('create review pressed')}
+            />
+            <AppBarTab
+              style={styles.tab}
+              link="/"
+              textContent="Sign-Out"
+              onPress={signout}
+            />
+          </>
         )}
       </ScrollView>
     </View>
