@@ -1,7 +1,8 @@
 import Constants from 'expo-constants'
 import { StyleSheet, Text, View } from 'react-native'
-import { Navigate, Route, Routes } from 'react-router-native'
+import { Navigate, Route, Routes, useParams } from 'react-router-native'
 import AppBar from './components/AppBar'
+import RepositoryDetails from './components/RepositoryDetails'
 import RepositoryList from './components/RepositoryList'
 import { SignIn } from './components/SignIn'
 import theme from './theme'
@@ -24,6 +25,7 @@ const Main = () => {
         <Routes>
           <Route path="/" element={<RepositoryList />} exact />
           <Route path="/signin" element={<SignIn />} exact />
+          <Route path="/repository/:id" element={<RepositoryDetails />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </View>
