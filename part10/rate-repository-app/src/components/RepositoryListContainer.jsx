@@ -1,7 +1,9 @@
 import { FlatList } from 'react-native'
-import { RepositoryItem } from './RepositoryItem'
+import { useNavigate } from 'react-router-native'
+import RepositoryItem from './RepositoryItem'
 
 export const RepositoryListContainer = ({ repositories }) => {
+  const navigate = useNavigate()
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : []
@@ -11,7 +13,7 @@ export const RepositoryListContainer = ({ repositories }) => {
       <FlatList
         data={repositoryNodes}
         //ItemSeparatorComponent={ItemSeparator}
-        renderItem={RepositoryItem}
+        renderItem={(props) => <RepositoryItem {...props} />}
         // other props
       />
     </>

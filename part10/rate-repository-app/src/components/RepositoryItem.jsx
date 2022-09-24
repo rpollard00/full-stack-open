@@ -1,4 +1,14 @@
-import { Image, StyleSheet, View } from 'react-native'
+import * as Linking from 'expo-linking'
+import { useState } from 'react'
+import {
+  Button,
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import { useNavigate } from 'react-router-native'
 import theme from '../theme'
 import { formatLargeNumber } from '../utils/formatLargeNumber'
 import Text, { Subheading, Tag } from './Text'
@@ -55,45 +65,85 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
   },
+  button: {
+    width: '100%',
+    backgroundColor: theme.colors.primary,
+    display: 'flex',
+    alignItems: 'center',
+    padding: 14,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginLeft: 0,
+  },
+  buttonText: {
+    color: theme.colors.textLight,
+    fontWeight: 'bold',
+  },
 })
 
-export const RepositoryItem = ({ item }) => (
+const RepositoryItemFields = ({ item, showUrl, onPress }) => (
   <View testID="repositoryItem" style={styles.container}>
-    <View style={styles.inner}>
-      <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
-      <View style={styles.heading}>
-        {/* <ScrollView horizontal style={{ display: 'flex' }}> */}
-        <Subheading style={styles.name}>Full Name: {item.fullName}</Subheading>
+    <Pressable onPress={onPress}>
+      <View style={styles.inner}>
+        <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
+        <View style={styles.heading}>
+          <Subheading style={styles.name}>
+            Full Name: {item.fullName}
+          </Subheading>
 
-        <Text style={styles.text}>Description: {item.description}</Text>
+          <Text style={styles.text}>Description: {item.description}</Text>
+        </View>
       </View>
-    </View>
-    <Tag textContent={item.language} />
-    <View style={styles.stats}>
-      <View>
-        <Text style={styles.statsText} fontWeight="bold">
-          {formatLargeNumber(item.stargazersCount)}
-        </Text>
-        <Text style={styles.statsText}>Stars</Text>
+      <Tag textContent={item.language} />
+      <View style={styles.stats}>
+        <View>
+          <Text style={styles.statsText} fontWeight="bold">
+            {formatLargeNumber(item.stargazersCount)}
+          </Text>
+          <Text style={styles.statsText}>Stars</Text>
+        </View>
+        <View>
+          <Text style={styles.statsText} fontWeight="bold">
+            {formatLargeNumber(item.forksCount)}
+          </Text>
+          <Text style={styles.statsText}>Forks</Text>
+        </View>
+        <View>
+          <Text style={styles.statsText} fontWeight="bold">
+            {formatLargeNumber(item.reviewCount)}
+          </Text>
+          <Text style={styles.statsText}>Reviews</Text>
+        </View>
+        <View>
+          <Text fontWeight="bold" style={styles.statsText}>
+            {item.ratingAverage}
+          </Text>
+          <Text style={styles.statsText}>Ratings</Text>
+        </View>
       </View>
-      <View>
-        <Text style={styles.statsText} fontWeight="bold">
-          {formatLargeNumber(item.forksCount)}
-        </Text>
-        <Text style={styles.statsText}>Forks</Text>
-      </View>
-      <View>
-        <Text style={styles.statsText} fontWeight="bold">
-          {formatLargeNumber(item.reviewCount)}
-        </Text>
-        <Text style={styles.statsText}>Reviews</Text>
-      </View>
-      <View>
-        <Text fontWeight="bold" style={styles.statsText}>
-          {item.ratingAverage}
-        </Text>
-        <Text style={styles.statsText}>Ratings</Text>
-      </View>
-    </View>
+      {showUrl ? (
+        <Pressable
+          onPress={() => Linking.openURL(item.url)}
+          style={styles.button}
+          color={theme.colors.primary}
+        >
+          <Text style={styles.buttonText}>Open on GitHub</Text>
+        </Pressable>
+      ) : null}
+    </Pressable>
   </View>
 )
+
+const RepositoryItem = ({ item, showUrl }) => {
+  const navigate = useNavigate()
+  const onPress = () => {
+    console.log(`${item.id} pressed`)
+    navigate(`/repository/${item.id}`)
+  }
+
+  return (
+    <RepositoryItemFields item={item} showUrl={showUrl} onPress={onPress} />
+  )
+}
+
+export default RepositoryItem
