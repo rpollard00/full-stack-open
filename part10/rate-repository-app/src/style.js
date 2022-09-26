@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: 'black',
   },
+
   innerColumn: {
     borderWidth: 0,
     flex: 1,
@@ -112,18 +113,29 @@ export const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
   },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderWidth: 0,
+    margin: 0,
+    borderColor: 'black',
+    justifyContent: 'space-between',
+  },
   button: {
-    width: '100%',
+    //width: '100%',
     backgroundColor: theme.colors.primary,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 5,
     marginVertical: 10,
     marginLeft: 0,
+    flex: 1,
   },
   buttonText: {
     color: theme.colors.textLight,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 })

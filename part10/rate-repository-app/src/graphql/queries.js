@@ -17,6 +17,15 @@ export const REPOSITORY_FIELDS = gql`
   }
 `
 
+export const REVIEW_FIELDS = gql`
+  fragment ReviewFields on Review {
+    id
+    text
+    rating
+    createdAt
+  }
+`
+
 export const GET_REPOSITORIES = gql`
   ${REPOSITORY_FIELDS}
   query Repositories(
@@ -49,6 +58,7 @@ export const GET_REPOSITORIES = gql`
 
 export const GET_REPOSITORY = gql`
   ${REPOSITORY_FIELDS}
+  ${REVIEW_FIELDS}
   query Repository(
     $repositoryId: ID!
     $reviewsFirst: Int
@@ -60,10 +70,7 @@ export const GET_REPOSITORY = gql`
       reviews(first: $reviewsFirst, after: $reviewsAfter) {
         edges {
           node {
-            id
-            text
-            rating
-            createdAt
+            ...ReviewFields
             user {
               id
               username
@@ -82,10 +89,22 @@ export const GET_REPOSITORY = gql`
 `
 
 export const ME = gql`
-  query {
+  ${REVIEW_FIELDS}
+  query getMe($includeReviews: Boolean = false) {
     me {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...ReviewFields
+            repository {
+              id
+              fullName
+            }
+          }
+        }
+      }
     }
   }
 `

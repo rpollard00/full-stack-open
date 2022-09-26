@@ -1,42 +1,17 @@
 import { useQuery } from '@apollo/client'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
-import { FlatList, View } from 'react-native'
-import { useParams } from 'react-router-native'
+import { FlatList, Pressable, View } from 'react-native'
+import { useNavigate, useParams } from 'react-router-native'
 import { GET_REPOSITORY } from '../graphql/queries'
 import { styles } from '../style'
 import RepositoryItem from './RepositoryItem'
+import { ReviewItem } from './ReviewItem'
 import Text from './Text'
 
 const RepositoryInfo = ({ repository }) => {
   console.log(repository)
   return <RepositoryItem item={repository} detailView={true} />
-}
-
-const ReviewItem = ({ review }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        {/* Left Column */}
-        <View style={{ ...styles.innerColumn, ...styles.innerColumnLeft }}>
-          <View style={styles.reviewScoreView}>
-            <Text style={styles.reviewScoreText}>{review.rating}</Text>
-          </View>
-        </View>
-        {/* Right Column  */}
-        <View style={{ ...styles.innerColumn, ...styles.innerColumnRight }}>
-          <Text fontSize="subheading" fontWeight="bold">
-            {review.user.username}
-          </Text>
-          <Text color="textSecondary">
-            {format(new Date(review.createdAt), 'MM.dd.yyyy')}
-          </Text>
-
-          <Text>{review.text}</Text>
-        </View>
-      </View>
-    </View>
-  )
 }
 
 const RepositoryDetails = () => {
@@ -48,9 +23,7 @@ const RepositoryDetails = () => {
     variables: { ...variables },
   })
 
-  useEffect(() => {
-    console.log('use effect hook')
-  }, [data])
+  useEffect(() => {}, [data])
 
   const handleFetchMore = async () => {
     const canFetchMore =
@@ -71,8 +44,6 @@ const RepositoryDetails = () => {
 
   const onEndReach = () => {
     handleFetchMore()
-    console.log('data updated??', data)
-    console.log('Reached the end of reviews')
   }
 
   if (loading) return

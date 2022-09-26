@@ -92,11 +92,18 @@ const AppBar = () => {
             />
           </>
         ) : (
+          // This is the logged in view
           <>
             <AppBarTab
               style={styles.tab}
               link="/createReview"
               textContent="Create a review"
+              onPress={() => console.log('create review pressed')}
+            />
+            <AppBarTab
+              style={styles.tab}
+              link="/myReviews"
+              textContent="My reviews"
               onPress={() => console.log('create review pressed')}
             />
             <AppBarTab
