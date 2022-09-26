@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     display: 'flex',
     flexDirection: 'row',
-    flexGrow: 1,
+    flexGrow: 0,
     flexShrink: 0,
     //marginBottom: 6,
     paddingStart: 10,

@@ -6,9 +6,11 @@ export const styles = StyleSheet.create({
   outer: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: theme.colors.darkBackground,
+    flex: 1,
   },
   outerContainer: {
     backgroundColor: theme.colors.background,
+    flex: 1,
   },
   separator: {
     height: 10,

@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { useNavigate } from 'react-router-native'
 import RepositoryItem from './RepositoryItem'
 import RepositoryListHeader from './RepositoryListHeader'
 
 export const RepositoryListContainer = ({
   repositories,
-  repoSort,
-  setRepoSort,
   searchQuery,
+  onEndReach,
 }) => {
   const navigate = useNavigate()
 
@@ -32,6 +31,8 @@ export const RepositoryListContainer = ({
         data={filteredRepositoryNodes}
         //ItemSeparatorComponent={ItemSeparator}
         renderItem={(props) => <RepositoryItem {...props} />}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         // other props
       />
     </>

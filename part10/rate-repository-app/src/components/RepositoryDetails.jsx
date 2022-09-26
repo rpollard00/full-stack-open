@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { format } from 'date-fns'
+import { useEffect, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import { useParams } from 'react-router-native'
 import { GET_REPOSITORY } from '../graphql/queries'
@@ -40,17 +41,44 @@ const ReviewItem = ({ review }) => {
 
 const RepositoryDetails = () => {
   const { id } = useParams()
-  const repositoryResult = useQuery(GET_REPOSITORY, {
+  const variables = { repositoryId: id, reviewsFirst: 10 }
+
+  const { loading, data, fetchMore } = useQuery(GET_REPOSITORY, {
     fetchPolicy: 'cache-and-network',
-    variables: { repositoryId: id },
+    variables: { ...variables },
   })
 
-  if (repositoryResult.loading) return
+  useEffect(() => {
+    console.log('use effect hook')
+  }, [data])
 
-  const repository = repositoryResult.data.repository
+  const handleFetchMore = async () => {
+    const canFetchMore =
+      !loading && data?.repository.reviews.pageInfo.hasNextPage
 
-  const reviews = repository.reviews
-    ? repository.reviews.edges.map((edge) => edge.node)
+    if (!canFetchMore) {
+      return
+    }
+
+    fetchMore({
+      variables: {
+        reviewsAfter: data.repository.reviews.pageInfo.endCursor,
+        after: data.repository.reviews.pageInfo.endCursor,
+        ...variables,
+      },
+    })
+  }
+
+  const onEndReach = () => {
+    handleFetchMore()
+    console.log('data updated??', data)
+    console.log('Reached the end of reviews')
+  }
+
+  if (loading) return
+
+  const reviews = data.repository.reviews
+    ? data.repository.reviews.edges.map((edge) => edge.node)
     : []
 
   return (
@@ -58,7 +86,11 @@ const RepositoryDetails = () => {
       data={reviews}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
-      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ListHeaderComponent={() => (
+        <RepositoryInfo repository={data.repository} />
+      )}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   )
 }

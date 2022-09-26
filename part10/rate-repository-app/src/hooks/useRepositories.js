@@ -2,20 +2,37 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { GET_REPOSITORIES } from '../graphql/queries'
 
-const useRepositoriesGraphQl = (repoSort) => {
-  console.log('repoSort', repoSort)
+const useRepositoriesGraphQl = (variables) => {
+  console.log('useRepo', variables)
 
   const [repositories, setRepositories] = useState()
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      orderBy: repoSort['sort'],
-      orderDirection: repoSort['order'],
-    },
-  })
+  const { data, error, loading, fetchMore, ...result } = useQuery(
+    GET_REPOSITORIES,
+    {
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        ...variables,
+      },
+    }
+  )
 
   const fetchRepositories = () => {
     setRepositories(data.repositories)
+  }
+
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage
+
+    if (!canFetchMore) {
+      return
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...variables,
+      },
+    })
   }
 
   useEffect(() => {
@@ -28,7 +45,12 @@ const useRepositoriesGraphQl = (repoSort) => {
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
 
-  return { repositories, loading }
+  return {
+    repositories: data?.repositories,
+    loading,
+    fetchMore: handleFetchMore,
+    ...result,
+  }
 }
 
 const useRepositories = () => {

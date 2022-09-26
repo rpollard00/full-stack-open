@@ -52,24 +52,24 @@ const RepositoryListHeader = ({
           <Picker.Item
             label="Latest repositories"
             value={{
-              sort: 'CREATED_AT',
-              order: 'DESC',
+              orderBy: 'CREATED_AT',
+              orderDirection: 'DESC',
               friendly: 'Latest repositories',
             }}
           />
           <Picker.Item
             label="Highest rated repositories"
             value={{
-              sort: 'RATING_AVERAGE',
-              order: 'DESC',
+              orderBy: 'RATING_AVERAGE',
+              orderDirection: 'DESC',
               friendly: 'Highest rated',
             }}
           />
           <Picker.Item
             label="Lowest rated repositories"
             value={{
-              sort: 'RATING_AVERAGE',
-              order: 'ASC',
+              orderBy: 'RATING_AVERAGE',
+              orderDirection: 'ASC',
               friendly: 'Lowest rated',
             }}
           />

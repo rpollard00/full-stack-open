@@ -6,13 +6,17 @@ import RepositoryListHeader from './RepositoryListHeader'
 
 const RepositoryList = () => {
   const [repoSort, setRepoSort] = useState({
-    sort: 'CREATED_AT',
-    order: 'DESC',
+    orderBy: 'CREATED_AT',
+    orderDirection: 'DESC',
     friendly: 'Latest repositories',
   })
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
-  const { repositories } = useRepositories(repoSort)
+  const { repositories, fetchMore } = useRepositories({ ...repoSort, first: 5 })
+
+  const onEndReach = () => {
+    fetchMore()
+  }
 
   useEffect(() => {
     setRepoSort(repoSort)
@@ -32,6 +36,7 @@ const RepositoryList = () => {
         repoSort={repoSort}
         setRepoSort={setRepoSort}
         searchQuery={debouncedSearchQuery}
+        onEndReach={onEndReach}
       />
     </>
   )
