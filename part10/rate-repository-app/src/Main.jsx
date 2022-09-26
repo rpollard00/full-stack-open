@@ -7,23 +7,14 @@ import RepositoryList from './components/RepositoryList'
 import { SubmitReview } from './components/ReviewForm'
 import { SignIn } from './components/SignIn'
 import { SignUp } from './components/SignUpForm'
+import { styles } from './style'
 import theme from './theme'
-
-const styles = StyleSheet.create({
-  outer: {
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: theme.colors.darkBackground,
-  },
-  container: {
-    backgroundColor: theme.colors.background,
-  },
-})
 
 const Main = () => {
   return (
     <View style={styles.outer}>
       <AppBar />
-      <View style={styles.container}>
+      <View style={styles.outerContainer}>
         <Routes>
           <Route path="/" element={<RepositoryList />} exact />
           <Route path="/signin" element={<SignIn />} exact />

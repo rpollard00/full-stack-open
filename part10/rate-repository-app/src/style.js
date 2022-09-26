@@ -1,9 +1,24 @@
+import Constants from 'expo-constants'
 import { StyleSheet } from 'react-native'
 import theme from './theme'
 
 export const styles = StyleSheet.create({
+  outer: {
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: theme.colors.darkBackground,
+  },
+  outerContainer: {
+    backgroundColor: theme.colors.background,
+  },
   separator: {
     height: 10,
+  },
+  subHeadingContainer: {
+    display: 'flex',
+    padding: 20,
+    backgroundColor: theme.colors.background,
+    margin: 5,
+    borderRadius: 0,
   },
   container: {
     display: 'flex',
@@ -67,6 +82,16 @@ export const styles = StyleSheet.create({
     flexGrow: 0,
     flexShrink: 1,
     paddingBottom: 10,
+  },
+  headerBar: {
+    display: 'flex',
+    paddingLeft: 0,
+    marginTop: 8,
+    flexGrow: 0,
+    flexShrink: 1,
+    paddingBottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   stats: {
     display: 'flex',

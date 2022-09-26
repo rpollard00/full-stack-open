@@ -19,8 +19,11 @@ export const REPOSITORY_FIELDS = gql`
 
 export const GET_REPOSITORIES = gql`
   ${REPOSITORY_FIELDS}
-  query {
-    repositories {
+  query Repositories(
+    $orderBy: AllRepositoriesOrderBy
+    $orderDirection: OrderDirection
+  ) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
       totalCount
       edges {
         node {
