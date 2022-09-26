@@ -73,14 +73,24 @@ const AppBar = () => {
           }}
         />
         {!me.data.me ? (
-          <AppBarTab
-            style={styles.tab}
-            link="/signin"
-            textContent="Sign-In"
-            onPress={() => {
-              console.log('Pressed Sign-In')
-            }}
-          />
+          <>
+            <AppBarTab
+              style={styles.tab}
+              link="/signin"
+              textContent="Sign-In"
+              onPress={() => {
+                console.log('Pressed Sign-In')
+              }}
+            />
+            <AppBarTab
+              style={styles.tab}
+              link="/signup"
+              textContent="Sign-Up"
+              onPress={() => {
+                console.log('Pressed Sign-Up')
+              }}
+            />
+          </>
         ) : (
           <>
             <AppBarTab
